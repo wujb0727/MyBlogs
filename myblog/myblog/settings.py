@@ -35,9 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog.apps.BlogConfig',
     'ckeditor',
     'ckeditor_uploader',
+    'blog.apps.BlogConfig',  # 将自己创建的app添加到设置中
+    'read_statistics.apps.ReadStatisticsConfig',  # 注册阅读统计app
 ]
 
 MIDDLEWARE = [
@@ -133,12 +134,20 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
-# 自定义参数
-EACH_PAGE_BLOGS_NUMBER = 5
-
 # media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 配置ckeditor
 CKEDITOR_UPLOAD_PATH = 'upload/'
+
+# 自定义参数
+EACH_PAGE_BLOGS_NUMBER = 5
+
+# 设置数据缓存
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_read_num_cache_table',
+    }
+}
