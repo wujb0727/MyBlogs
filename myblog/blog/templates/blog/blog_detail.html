@@ -1,28 +1,29 @@
 {# 引用模板 #}
 {% extends 'base.html' %}
+
 {% load staticfiles %}
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'blog/blog.css' %}">
+{% endblock %}
+
 
 {# 标题 #}
 {% block title %}
     {{ blog.title }}
 {% endblock %}
 
-{% block hander_extends %}
-    <link rel="stylesheet" href="{% static 'blog/blog.css' %}">
-{% endblock %}
-
-{# 内容 #}
+{# 内容#}
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-6 offset-1">
+            <div class="col-10 offset-1">
                 <ul class="blog-info-description">
                     <h3>{{ blog.title }}</h3>
                     <li>作者：{{ blog.author }}</li>
                     {# 时间过滤器让时间按照自己需要的格式过滤 #}
-                    <li>发布日期：{{ blog.created_time|date:"Y-m-d H:i:s" }}</li>
+                    <li>发布日期：{{ blog.created_time|date:"Y-m-d H:n:s" }}</li>
                     <li>分类：
-                        <a href="{% url 'blog_with_type' blog.blog_type.pk %}">
+                        <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">
                             {{ blog.blog_type }}
                         </a>
                     </li>
@@ -30,16 +31,15 @@
                 </ul>
                 <p class="blog-content">{{ blog.content|safe }}</p>
 
-                <p>
-                    上一篇
+
+                <p>上一篇：
                     {% if previous_blog %}
                         <a href="{% url 'blog_detail' previous_blog.pk %}">{{ previous_blog.title }}</a>
                     {% else %}
                         <span>没有了</span>
                     {% endif %}
                 </p>
-                <p>
-                    下一篇
+                <p>下一篇：
                     {% if next_blog %}
                         <a href="{% url 'blog_detail' next_blog.pk %}">{{ next_blog.title }}</a>
                     {% else %}
@@ -48,19 +48,50 @@
                 </p>
             </div>
         </div>
+        <div class="row">
+            <div class="col-10 offset-1">
+                <div class="comment-area">
+                    <h3 class="comment-area-title">提交评论</h3>
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'update_comment' %}" method="post" style="overflow: hidden">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="form-control">{{ user.username }},欢迎评论～</label>
+                                <textarea class="form-control" name="text" id="comment_text" rows="4"></textarea>
+                            </div>
+                            <input type="hidden" name="object_id" value="{{ blog.pk }}">
+                            <input type="hidden" name="content_type" value="blog">
+                            <input type="submit" value="评论" class="btn btn-primary float-right">
+                        </form>
+                    {% else %}
+                        未登录，登录之后方可评论
+                        <form action="{% url 'login' %}" method="post">
+                            {% csrf_token %}
+                            <span>用户名：</span>
+                            <input type="text" name="username">
+                            <span>密码：</span>
+                            <input type="password" name="password">
+                            <input type="submit" value="登录">
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="-comment-area">
+                    <h3 class="comment-area-title">评论列表</h3>
+                    {% for comment in comments %}
+                        <div>
+                            {{ comment.user.username }}
+                            {{ comment.comment_time|date:"Y-m-d H:n:s" }}
+                            {{ comment.text }}
+                        </div>
+                    {% empty %}
 
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
-    {#    <h3>{{ blog.title }}</h3>#}
-    {#    <p>作者:{{ blog.author }}</p>#}
-    {# 时间过滤器让时间按照自己需要的格式过滤 #}
-    {#    <p>发布日期:{{ blog.created_time|date:"Y-m-d H:i:s" }}</p>#}
-    {#    <p>分类:#}
-    {#        <a href="{% url 'blog_with_type' blog.blog_type.pk %}">#}
-    {#            {{ blog.blog_type }}#}
-    {#        </a>#}
-    {#    </p>#}
-    {#    <p>{{ blog.content }}</p>#}
 {% endblock %}
+
 {% block js %}
     <script>
         $(".nav-blog").addClass("active").siblings().removeClass("active");

@@ -22,6 +22,9 @@ from . import views
 urlpatterns = [
                   path('', views.home, name='home'),  # 主页路径
                   path('admin/', admin.site.urls),
-                  path('ckeditor', include('ckeditor_uploader.urls')),
+                  path('ckeditor', include('ckeditor_uploader.urls')),  # 配置上传url
                   path('blog/', include('blog.urls')),  # 博客app路径
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  path('comment/', include('comment.urls')),  # 评论app路径
+                  path('login/', views.login, name='login'),  # 登录
+                  path('register/', views.register, name='register'),  # 登录
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  # 设置ckeditor的上传
