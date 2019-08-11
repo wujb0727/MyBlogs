@@ -1,7 +1,6 @@
-# encoding: utf-8
-# @Author: TiAmo
-# @Project: MyBlogs 
-# @Time: 2019/8/9 17:09
+# -*- coding: utf-8 -*-
+# @Time    : 18-11-22 下午7:48
+# @Author  : Felix Wang
 
 from django import template
 from django.contrib.contenttypes.models import ContentType

@@ -1,28 +1,25 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load comment_tags %}
-{#{% 标题 %}#}
+{% load likes_tags %}
+
+{# 标题 #}
 {% block title %}
-    TempleToth Blog
+    felix Blog
 {% endblock %}
 
-{% block hander_extends %}
+{% block header_extends %}
     <link rel="stylesheet" href="{% static 'blog/blog.css' %}">
     <link rel="stylesheet" href="{% static 'fontawesome-free-5.5.0-web/css/all.min.css' %}">
 {% endblock %}
 
-{# 内容 #}
+{# 内容#}
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-md-8">
                 <div class="card" style="">
-                    <div class="card-header">
-                        <h5 class="card-title">
-                            {% block blog_type_title %}
-                                博客列表
-                            {% endblock %}
-                        </h5>
+                    <div class="card-header"><h5 class="card-title">{% block blog_type_title %}博客列表{% endblock %}</h5>
                     </div>
                     <div class="card-body">
                         {% for blog in blogs %}
@@ -33,78 +30,79 @@
                                         {# 添加图标 #}
                                         <span>
                                             <i class="fas fa-tag"></i>
-                                            <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">{{ blog.blog_type }}</a>
+                                            <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">
+                                                {{ blog.blog_type }}
+                                            </a>
                                         </span>
                                         <span>
-                                            <i class="far fa-clock"></i>
-                                            {{ blog.created_time|date:'Y-m-d' }}
+                                            <i class="far fa-clock  "></i>
+                                            {{ blog.created_time|date:"Y-m-d" }}
                                         </span>
                                         <span>阅读({{ blog.get_read_num }})</span>
-                                        <span>评论{% get_comment_count blog %}</span>
-                                    </p>
+                                        <span>评论({% get_comment_count blog %})</span>
+                                        <span>点赞({% get_like_count blog %})</span>
+                                    <p>
                                 </div>
-                                <p>{{ blog.content|truncatechars:30 }}</p>
+                                <p>{{ blog.content|safe|truncatechars:30 }}</p>
                             </div>
                         {% empty %}
                             <div class="blog">
                                 <h3>--暂无博客，敬请期待--</h3>
                             </div>
                         {% endfor %}
-
                     </div>
-                    {# 分页 #}
-                    <div class="paginator">
-                        <ul class="pagination justify-content-center">
-                            {# 首页 #}
-                            <li class="page-item"><a href="?page=1" class="page-link">首页</a></li>
-                            {# 上一页 #}
-                            {% if page_of_blogs.has_previous %}
-                                <li class="page-item"><a href="?page={{ page_of_blogs.previous_page_number }}"
-                                                         class="page-link">上一页</a></li>
-                            {% else %}
-                                <li class="page-item disabled"><span class="page-link">上一页</span></li>
-                            {% endif %}
-                            {# 全部页码 #}
-                            {% for page_num in page_range %}
-                                {# 添加当前页高亮显示 #}
-                                {% if page_num == page_of_blogs.number %}
-                                    <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
-                                {% else %}
-                                    <li class="page-item"><a href="?page={{ page_num }}"
-                                                             class="page-link">{{ page_num }}</a></li>
-                                {% endif %}
-                            {% endfor %}
-                            {# 下一页 #}
-                            {% if page_of_blogs.has_next %}
-                                <li class="page-item"><a href="?page={{ page_of_blogs.next_page_number }}"
-                                                         class="page-link">下一页</a></li>
-                            {% else %}
-                                <li class="page-item disabled"><span class="page-link">下一页</span></li>
-                            {% endif %}
-                            {# 尾页 #}
-                            <li class="page-item"><a href="?page={{ page_of_blogs.paginator.num_pages }}"
-                                                     class="page-link">尾页</a></li>
-                        </ul>
-                        <p>
-                            一共有{{ page_of_blogs.paginator.count }}篇博客,当前{{ page_of_blogs.number }}页,
-                            共{{ page_of_blogs.paginator.num_pages }}页
-                        </p>
-                    </div>
+                </div>
 
+                {# 分页 #}
+                <div class="paginator">
+                    <ul class="pagination justify-content-center">
+                        {# 首页 #}
+                        <li class="page-item"><a class="page-link" href="?page=1">首页</a></li>
+                        {# 上一页 #}
+                        {% if page_of_blogs.has_previous %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?page={{ page_of_blogs.previous_page_number }}">上一页</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">上一页</span></li>
+                        {% endif %}
+                        {# 全部页码 #}
+                        {% for page_num in page_range %}
+                            {# 添加当前页高亮显示 #}
+                            {% if page_num == page_of_blogs.number %}
+                                <li class="page-item active"><span class="page-link">{{ page_num }}</span></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link"
+                                                         href="?page={{ page_num }}">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {# 下一页 #}
+                        {% if page_of_blogs.has_next %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?page={{ page_of_blogs.next_page_number }}">下一页</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">下一页</span></li>
+                        {% endif %}
+                        {# 尾页 #}
+                        <li class="page-item"><a class="page-link"
+                                                 href="?page={{ page_of_blogs.paginator.num_pages }}">尾页</a></li>
+                    </ul>
+
+                    <p>
+                        一共有 {{ page_of_blogs.paginator.count }}篇博客，当前{{ page_of_blogs.number }}页，共{{ page_of_blogs.paginator.num_pages }}页
+                    </p>
 
                 </div>
             </div>
+
             <div class="col-md-4">
-                <div class="card" style="">
-                    <div class="card-header">
-                        <h5 class="card-title">博客分类</h5>
-                    </div>
+                <div class="card">
+                    <div class="card-header"><h5 class="card-title">博客分类</h5></div>
                     <div class="card-body">
                         <ul class="blog-types">
                             {% for blog_type in blog_types %}
                                 <li>
-                                    <a href="{% url 'blogs_with_type' blog_type.pk %}">
-                                        {{ blog_type.type_name }}({{ blog_type.blog_count }})</a>
+                                    <a href="{% url 'blogs_with_type' blog_type.pk %}">{{ blog_type.type_name }}({{ blog_type.blog_count }})</a>
                                 </li>
                             {% empty %}
                                 <li>暂无分类</li>
@@ -112,6 +110,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <div class="card">
                     <div class="card-header"><h5 class="card-title">日期归档</h5></div>
                     <div class="card-body">
@@ -125,24 +124,15 @@
                             {% empty %}
                                 <li>暂无分类</li>
                             {% endfor %}
-
                         </ul>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-    {#    {% for blog in blogs %}#}
-    {#        <a href="{% url 'blog_detail' blog.pk %}"><h3>{{ blog.title }}</h3></a>#}
-    {#    添加过滤器 文章太长时只显示前30个字符  #}
-    {#        <p>{{ blog.content|truncatechars:30 }}</p>#}
-    {#    {% empty %}#}
-    {#        <p>--暂无博客，敬请期待--</p>#}
-    {#    {% endfor %}#}
-    {# 过滤器统计博客数量 #}
-    {#    <p>一共有{{ blogs|length }}篇博客</p>#}
+
 {% endblock %}
+
 {% block js %}
     <script>
         $(".nav-blog").addClass("active").siblings().removeClass("active");

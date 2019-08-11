@@ -1,10 +1,11 @@
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import render, redirect
 from django.contrib.contenttypes.models import ContentType
+from django.contrib import auth
+from django.contrib.auth.models import User
+from django.urls import reverse
 from read_statistics.utils import get_seven_days_read_data, get_x_days_hot_data
 from blog.models import Blog
-from django.contrib import auth
 from .forms import LoginForm, RegisterForm
-from django.contrib.auth.models import User
 
 
 def home(requests):
@@ -19,23 +20,12 @@ def home(requests):
         'seven_days_hot_data': get_x_days_hot_data(7),  # 获取周热门
         'one_month_hot_data': get_x_days_hot_data(30),  # 获取月热门
     }
-
     return render(requests, 'home.html', context)
 
 
 def login(requests):
-    username = requests.POST.get('username', '')
-    password = requests.POST.get('password', '')
-    user = auth.authenticate(requests, username=username, password=password)
-    referer = requests.META.get('HTTP_REFERER', reverse('home'))
-    if user is not None:
-        auth.login(requests, user)
-        return redirect('/')
-    else:
-        return render(requests, 'error.html', {'message': '用户名或密码错误', 'redirect_to': referer})
-
-
-def login(requests):
+    print(requests.POST)
+    print(requests.GET)
     # 如果是form表单提交验证登录
     if requests.method == 'POST':
         login_form = LoginForm(requests.POST)
