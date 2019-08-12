@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'read_statistics.apps.ReadStatisticsConfig',  # 注册阅读统计app
     'comment.apps.CommentConfig',  # 注册评论app
     'likes.apps.LikesConfig',  # 注册点赞app
+    'user.apps.UserConfig'  # 用户相关
 ]
 
 MIDDLEWARE = [
@@ -70,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'user.context_processors.login_model_form'  # 自定义模板变量，直接用模板语言调用
             ],
         },
     },
