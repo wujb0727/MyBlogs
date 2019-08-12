@@ -6,6 +6,7 @@ from django.db.models import Count
 from read_statistics.utils import read_statistics_once_read
 from .models import Blog, BlogType
 from comment.models import Comment
+from myblog.forms import LoginForm
 
 
 # 分页部分公共代码

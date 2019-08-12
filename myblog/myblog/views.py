@@ -6,6 +6,7 @@ from django.urls import reverse
 from read_statistics.utils import get_seven_days_read_data, get_x_days_hot_data
 from blog.models import Blog
 from .forms import LoginForm, RegisterForm
+from django.http import JsonResponse
 
 
 def home(requests):
@@ -42,6 +43,22 @@ def login(requests):
         'login_form': login_form,
     }
     return render(requests, 'login.html', context)
+
+
+def login_for_model(requests):
+    login_form = LoginForm(requests.POST)
+    # 如果是form表单提交验证登录
+    if login_form.is_valid():  # 验证是否通过
+        user = login_form.cleaned_data.get('user')
+        auth.login(requests, user)
+        data = {
+            'status': 'SUCCESS',
+        }
+    else:
+        data = {
+            'status': 'ERROR',
+        }
+    return JsonResponse(data)
 
 
 def register(requests):
