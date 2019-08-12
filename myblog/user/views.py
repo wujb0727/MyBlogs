@@ -27,7 +27,7 @@ def login(requests):
     context = {
         'login_form': login_form,
     }
-    return render(requests, 'login.html', context)
+    return render(requests, 'user/login.html', context)
 
 
 def login_for_model(requests):
@@ -69,7 +69,7 @@ def register(requests):
     context = {
         'reg_form': reg_form,
     }
-    return render(requests, 'register.html', context)
+    return render(requests, 'user/register.html', context)
 
 
 def logout(requests):
