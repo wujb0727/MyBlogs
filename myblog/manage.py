@@ -1,3 +1,10 @@
+'''
+@Description: 
+@Author: WuJinBo
+@Date: 2019-08-07 09:42:37
+@LastEditTime: 2019-08-13 14:30:49
+@LastEditors: WuJinBo
+'''
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
 import os

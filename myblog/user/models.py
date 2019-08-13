@@ -1,3 +1,10 @@
+'''
+@Description: 
+@Author: WuJinBo
+@Date: 2019-08-12 20:15:52
+@LastEditTime: 2019-08-13 14:47:15
+@LastEditors: WuJinBo
+'''
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -27,7 +34,10 @@ def get_nickname_or_username(self):
 
 
 def has_nickname(self):
-    return Profile.objects.filter(user=self).exists()
+    if Profile.objects.filter(user=self).exists():
+        profile = Profile.objects.get(user=self)
+        return True if profile.nickname.strip() else False
+    return False
 
 
 User.get_nickname = get_nickname  # 动态绑定方法
