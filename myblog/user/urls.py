@@ -12,4 +12,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),  # 注册
     path('logout/', views.logout, name='logout'),  # 登出
     path('user_info/', views.user_info, name='user_info'),  # 登录
+    path('change_nickname/', views.change_nickname, name='change_nickname'),  # 更改昵称
+    path('bind_email/', views.bind_email, name='bind_email'),  # 绑定邮箱
+    path('send_verification_code', views.send_verification_code, name='send_verification_code'),
 ]

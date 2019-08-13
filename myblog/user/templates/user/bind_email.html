@@ -1,48 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'form.html' %}
 
-{% block title %}
-    我的博客|注册
-{% endblock %}
-
-{% block content %}
-    <div class="container">
-        {% if not user.is_authenticated %}
-            <div class="col-xl-6 offset-xl-3">
-            <div class="card">
-                <h5 class="card-header">注册</h5>
-                <div class="card-body">
-                    <form action="{% url 'register' %}" method="post">
-                        {% csrf_token %}
-                        {% for field in reg_form %}
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                            {{ field }}
-                            <p class="text-danger">{{ field.errors.as_text }}</p>
-                        {% endfor %}
-                        <span class="text-danger">{{ login_form.non_field_errors }}</span>
-                        <span id="error-tip" class="text-danger">{{ form.non_field_errors }}</span>
-                        <div class="clearfix"></div>
-                        <div id="send_code" class="btn btn-primary float-left">发送验证码</div>
-                        <input type="submit" value="注册" class="btn btn-primary float-right">
-                    </form>
-                </div>
-            </div>
-        {% else %}
-            <script>
-                window.location.href = '{% url 'home' %}'
-            </script>
-        {% endif %}
-        </div>
-    </div>
+{% block other-buttons %}
+    <div id="send_code" class="btn btn-primary">发送验证码</div>
 {% endblock %}
 
 {% block js %}
-    {# 将首页这个按钮设置激活状态 #}
     <script>
-        $(".nav-home").addClass("active").siblings().removeClass("active");
-    </script>
-
-    <script>
-
         $("#send_code").click(function () {
             if ($(this).hasClass('disabled')) {
                 return false;
@@ -65,7 +28,6 @@
                 type: 'GET',
                 data: {
                     'email': email,
-                    'send_for': 'register_code',
                 },
                 cache: false,
                 success: function (data) {

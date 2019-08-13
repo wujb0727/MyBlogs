@@ -202,3 +202,10 @@ CKEDITOR_CONFIGS = {
         'resize_enabled': False,
     }
 }
+
+# 发送邮箱设置
+MALL_HOST = 'smtp.qq.com'  # smtp服务地址
+EMAIL_POST = '465'  # 端口号
+EMAIL_HOST_USER = '453547966@qq.com'  # qq邮箱
+EMAIL_HOST_PASSWORD = 'wfps uaqa nbom bgie'  # 如果是qq邮箱的话该密码是配置qq邮箱的SMTP功能的授权码
+FROM_WHO = 'FCBlog'  # 前缀
